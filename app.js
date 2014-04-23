@@ -2,10 +2,10 @@
 const config = require('./config'),
       irc = require('irc'),
       https = require('https'),
-      armory = require('armory');/*.defaults({
+      armory = require('armory').defaults({
          realm : config.wow.realm,
          region : config.wow.region
-      })*/;
+      });
 
 // String.startsWith() taken from MDN
 if (!String.prototype.startsWith) {
