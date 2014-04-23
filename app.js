@@ -104,8 +104,9 @@ bot.addListener("message", function(from, to, text, message) {
                   break;
                case "whois":
                   var botResponse = from + ": whois - looks up a character." +
-                     " By default, uses the realm Sargeras, although you may" +
-                     " specify another realm. (e.g. whois Ganye - Archimonde)";
+                     " By default, uses the realm " + config.wow.realm + "," +
+                     " although you may specify another realm. (e.g. whois " +
+                     " Ganye - Archimonde)";
                   break;
                case "help":
                   var botResponse = from + ": help - displays this information.";
