@@ -2,10 +2,7 @@
 const config = require('./config'),
       irc = require('irc'),
       https = require('https'),
-      armory = require('armory').defaults({
-         realm : config.wow.realm,
-         region : config.wow.region
-      });
+      auctionbot = require('./auctionbot');
 
 // String.startsWith() taken from MDN
 if (!String.prototype.startsWith) {
@@ -60,18 +57,18 @@ bot.addListener("message", function(from, to, text, message) {
                };
             } else {
                var fields = {
-                  name : playerName
+                  name : playerName.trim()
                };
             }
-            armory.character(fields, function(err, res) {
+            auctionbot.findCharacter(fields, function(err, res, body) {
                if(err) {
                   var botResponse = from + ": could not find '" + playerName + "'";
                   console.log("[ERR]: " + err);
                } else {
-                  console.log(res);
+                  console.log(body);
                   var botResponse = from + ": " + playerName + " is a level " +
-                     res.level + " " + config.wow.raceid[res.race] + " " + 
-                     config.wow.classid[res.class] + "."; 
+                     body.level + " " + config.wow.raceid[body.race] + " " + 
+                     config.wow.classid[body.class] + "."; 
                }
                bot.say(to, botResponse);
             });
@@ -85,6 +82,8 @@ bot.addListener("message", function(from, to, text, message) {
             var item = text.slice(text.indexOf(" "));
             armory.auction({ realm : "Sargeras", region : "us" }, function(err, res) {
                if(err) {
+                  var botResponse = "ganye|work: " + err;
+                  bot.say(to, botResponse);
                   console.log(err);
                } else {
                   console.log(res);
